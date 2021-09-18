@@ -1,0 +1,413 @@
+<html>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<head>
+  <style>
+    .show_image {
+      width: 100px;
+      height: 100px;
+    }
+
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.css"/>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+  <script>
+
+    //BE SURE TO PROTECT EVERYTHING IN THE CONFIG
+    //DON'T COMMIT IT!!!
+
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOSIO2D1g8LWTRQoQ3A18o5jED3l0IcOw",
+      authDomain: "chinhbeo-c6220.firebaseapp.com",
+      projectId: "chinhbeo-c6220",
+      storageBucket: "chinhbeo-c6220.appspot.com",
+      messagingSenderId: "311219303832",
+      appId: "1:311219303832:web:e9d4d3d3c83e9b2edba7ed",
+      measurementId: "G-VDEMGD37RR"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <script type = "text/javascript">
+    // BEGIN UPLOAD FIRE BASE
+    // var image = '';
+    // // firebase bucket name
+    // // REPLACE WITH THE ONE YOU CREATE
+    // // ALSO CHECK STORAGE RULES IN FIREBASE CONSOLE
+    // var fbBucketName = 'images';
+    //
+    // // get elements
+    // var uploader = document.getElementById('uploader');
+    // var fileButton = document.getElementById('fileButton');
+    //
+    // // listen for file selection
+    // fileButton.addEventListener('change', function (e) {
+    //
+    //   // what happened
+    //   console.log('file upload event', e);
+    //
+    //   // get file
+    //   var file = e.target.files[0];
+    //
+    //   // create a storage ref
+    //   var storageRef = firebase.storage().ref(`${fbBucketName}/${file.name}`);
+    //
+    //   // upload file
+    //   var uploadTask = storageRef.put(file);
+    //
+    //   // The part below is largely copy-pasted from the 'Full Example' section from
+    //   // https://firebase.google.com/docs/storage/web/upload-files
+    //
+    //   // update progress bar
+    //   uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+    //           function (snapshot) {
+    //             // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+    //             var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    //             uploader.value = progress;
+    //             console.log('Upload is ' + progress + '% done');
+    //             switch (snapshot.state) {
+    //               case firebase.storage.TaskState.PAUSED: // or 'paused'
+    //                 console.log('Upload is paused');
+    //                 break;
+    //               case firebase.storage.TaskState.RUNNING: // or 'running'
+    //                 console.log('Upload is running');
+    //                 break;
+    //             }
+    //           }, function (error) {
+    //
+    //             // A full list of error codes is available at
+    //             // https://firebase.google.com/docs/storage/web/handle-errors
+    //             switch (error.code) {
+    //               case 'storage/unauthorized':
+    //                 // User doesn't have permission to access the object
+    //                 break;
+    //
+    //               case 'storage/canceled':
+    //                 // User canceled the upload
+    //                 break;
+    //
+    //               case 'storage/unknown':
+    //                 // Unknown error occurred, inspect error.serverResponse
+    //                 break;
+    //             }
+    //           }, function () {
+    //             // Upload completed successfully, now we can get the download URL
+    //             // save this link somewhere, e.g. put it in an input field
+    //             var downloadURL = uploadTask.snapshot.downloadURL;
+    //             // image = downloadURL;
+    //             console.log('downloadURL ===>', image);
+    //             let divLocation = document.getElementById("imgDiv");
+    //             let imgElement = document.createElement("img");
+    //             imgElement.src = downloadURL
+    //             console.log('pic ==', image)
+    //             divLocation.append(imgElement);
+    //           });
+    //
+    // });
+
+    //END UPLOAD FIRE BASE
+
+    $(document).ready(function () {
+
+      var book = {};
+      // var dynamicURL = "";
+      var image = resultImage();
+      var methodName = "";
+      getAllBooks();
+
+      $('#btnAddBook').click(function () {
+        book.producer = $('#producer').val();
+        console.log('producer', book.producer)
+        book.model = $('#model').val();
+        book.price = $('#price').val();
+        book.image =  resultImage();
+        console.log('book.image', book.image)
+        var id = $('#id').val();
+        console.log('id = ',id)
+        if(id){
+          document.getElementById('btnAddBook').innerHTML = "CREATE";
+          //update it
+          dynamicURL = "http://localhost:8080/phone/update/"+id;
+          methodName = "PUT";
+
+        }else{
+          document.getElementById('btnAddBook').innerHTML = "CREATE";
+          //save it
+          dynamicURL = "http://localhost:8080/phone/";
+          methodName = "POST";
+
+        }
+        var bookObj = JSON.stringify(book);
+        $.ajax({
+          url: dynamicURL,
+          method: methodName,
+          data: bookObj,
+          contentType: 'application/json; charset=utf-8',
+          success: function () {
+            alert('Saved successfully');
+            getAllBooks();
+            reset();
+            window.location.reload();
+          },
+          error: function (error) {
+            console.log('error',error)
+            alert(error);
+          }
+        })
+      })
+    })
+
+    function getAllBooks() {
+      $.ajax({
+        url: "http://localhost:8080/phone",
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+          console.log('data',data)
+          var tableBody = $('#tblBook tbody');
+
+          tableBody.empty();
+                   $(data).each(function (index, element) {
+                     for(let i=0;i<data.length;i++){
+                       element.content = '<img '+'class ='+"show_image "+'src='+element.image+'>';
+                     }
+                     console.log('element', element)
+            tableBody.append('<tr><td>'+element.producer+'</td><td>'+element.model+'</td><td>'+element.price+'</td>' +
+                    '<td>'+element.content+'</td><td><button onclick = "update('+element.id+')">Update</button> | <button onclick = "deleteBook('+element.id+')">Delete</button></td></tr>');
+
+          })
+        },
+        error: function (error) {
+          alert(error);
+        }
+      })
+    }
+
+    function deleteBook(id){
+      $.ajax({
+        url: 'http://localhost:8080/phone/delete/'+id,
+        method: 'DELETE',
+        success: function () {
+          alert('record has been deleted');
+          getAllBooks();
+        },
+        error: function (error) {
+          alert(error);
+        }
+      })
+    }
+    function searchPhone() {
+      let name = document.getElementById("search").value;
+      //lay du lieu
+      $.ajax({
+        type: "Get",
+        //tên API
+        // url: 'http://localhost:8080/phone/'+name,
+        url: `http://localhost:8080/phone/${name}`,
+        //xử lý khi thành công
+        success: function (data) {
+          console.log("data ====>", data)
+          var tableBody = $('#tblBook tbody');
+          tableBody.empty();
+          $(data).each(function (index, element) {
+            tableBody.append('<tr><td>'+element.producer+'</td><td>'+element.model+'</td><td>'+element.price+'</td><td><button onclick = "update('+element.id+')">Update</button> | <button onclick = "deleteBook('+element.id+')">Delete</button></td></tr>');
+          })
+        }
+      });
+
+    }
+
+    function update(id){
+      document.getElementById('btnAddBook').innerHTML = "EDIT";
+      $.ajax({
+        url: 'http://localhost:8080/phone/detail/'+id,
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+          $('#producer').val(data.producer);
+          $('#model').val(data.model);
+          $('#price').val(data.price);
+          $('#id').val(data.id);
+          getAllBooks();
+        },
+        error: function (error) {
+          alert(error);
+        }
+      })
+    }
+    function reset(){
+      $('#producer').val('');
+      $('#model').val('');
+      $('#price').val('');
+      $('#id').val('');
+
+    }
+  </script>
+</head>
+<body>
+
+<!--<input oninput="searchPhone()" type="text" id="search" placeholder="Search">-->
+<!--<button onclick="searchPhone()">Search</button>-->
+<div class="input-group mb-3">
+  <span class="input-group-text" id="basic-addon1">Search</span>
+  <input oninput="searchPhone()"type="text" id="search" class="form-control" placeholder="Search" aria-label="Username" aria-describedby="basic-addon1">
+</div>
+<div>
+
+  <table class="table">
+
+    <td>
+      <div class="input-group mb-3">
+        <input oninput="searchPhone()"type="hidden" id="id" class="form-control" placeholder="Search" aria-label="Username" aria-describedby="basic-addon1">
+      </div>
+      <!--            <input class="form-control" type="text" id = "id" hidden>-->
+    </td>
+
+    <tr>
+      <td>Producer</td>
+      <td><input type="text" id = "producer"></td>
+    </tr>
+    <tr>
+      <td>Model</td>
+      <td><input type="text" id = "model"></td>
+    </tr>
+    <tr>
+      <td>Price</td>
+      <td><input type="text" id = "price"></td>
+    </tr>
+    <tr>
+      <td>Image</td>
+      <td>
+        <progress value="0" max="100" id="uploader">0%</progress>
+        <input type="file" value="upload" accept=".jpg" id="fileButton">
+        <h1>Show Image</h1>
+        <div class="show_image" id="imgDiv"  ></div>
+
+      </td>
+    </tr>
+    <tr colspan = "2">
+      <td><button type="submit"  id="btnAddBook">Create</button></td>
+    </tr>
+  </table>
+  <table border = "1" id = "tblBook" class="table">
+    <thead>
+    <tr class="table-primary">
+      <th>Producer</th>
+      <th>Model</th>
+      <th>Price</th>
+      <th>Image</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
+</div>
+</body>
+<script type="text/javascript">
+  var image = '';
+  // firebase bucket name
+  // REPLACE WITH THE ONE YOU CREATE
+  // ALSO CHECK STORAGE RULES IN FIREBASE CONSOLE
+  var fbBucketName = 'images';
+
+  // get elements
+  var uploader = document.getElementById('uploader');
+  var fileButton = document.getElementById('fileButton');
+
+  // listen for file selection
+  fileButton.addEventListener('change', function (e) {
+
+    // what happened
+    console.log('file upload event', e);
+
+    // get file
+    var file = e.target.files[0];
+
+    // create a storage ref
+    var storageRef = firebase.storage().ref(`${fbBucketName}/${file.name}`);
+
+    // upload file
+    var uploadTask = storageRef.put(file);
+
+    // The part below is largely copy-pasted from the 'Full Example' section from
+    // https://firebase.google.com/docs/storage/web/upload-files
+
+    // update progress bar
+    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+            function (snapshot) {
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              uploader.value = progress;
+              console.log('Upload is ' + progress + '% done');
+              switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED: // or 'paused'
+                  console.log('Upload is paused');
+                  break;
+                case firebase.storage.TaskState.RUNNING: // or 'running'
+                  console.log('Upload is running');
+                  break;
+              }
+            }, function (error) {
+
+              // A full list of error codes is available at
+              // https://firebase.google.com/docs/storage/web/handle-errors
+              switch (error.code) {
+                case 'storage/unauthorized':
+                  // User doesn't have permission to access the object
+                  break;
+
+                case 'storage/canceled':
+                  // User canceled the upload
+                  break;
+
+                case 'storage/unknown':
+                  // Unknown error occurred, inspect error.serverResponse
+                  break;
+              }
+            }, function () {
+              // Upload completed successfully, now we can get the download URL
+              // save this link somewhere, e.g. put it in an input field
+              var downloadURL = uploadTask.snapshot.downloadURL;
+              image = downloadURL;
+              console.log('downloadURL ===>', downloadURL);
+              let divLocation = document.getElementById("imgDiv");
+              let imgElement = document.createElement("img");
+              imgElement.src = downloadURL
+              imgElement.width = 50;
+              imgElement.height = 50;
+              console.log('pic ==', downloadURL)
+              divLocation.append(imgElement);
+            });
+
+  });
+
+function resultImage(){
+  console.log('image resulte -->', image)
+  return image;
+}
+  // function displayImage(pic) {
+  //     console.log('goi ham pic')
+  //     console.log('pic tren', pic)
+  //     let divLocation = document.getElementById("imgDiv");
+  //     let imgElement = document.createElement("img");
+  //     imgElement.src = pic
+  //     console.log('pic ==', pic)
+  //     divLocation.append(imgElement);
+  // }
+  //
+  //
+  //
+  // displayImage(image);
+
+</script>
+</html>
