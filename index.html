@@ -18,15 +18,16 @@
 
 <head>
     <style>
+
         .show_image {
             width: 100px;
             height: 100px;
+            border-radius: 15%;
         }
-
     </style>
 
-
     <script type="text/javascript">
+        //CREATE
         $(document).ready(function () {
             var book = {};
             // var dynamicURL = "";
@@ -69,7 +70,7 @@
                         alert('Saved successfully');
                         pageSmartPhone();
                         reset();
-                        // window.location.reload();
+                        window.location.reload();
                     },
                     error: function (error) {
                         console.log('error', error)
@@ -78,6 +79,8 @@
                 })
             })
         })
+
+        //DELETE
         function deleteBook(id) {
             $.ajax({
                 url: 'http://localhost:8080/phone/delete/' + id,
@@ -91,6 +94,8 @@
                 }
             })
         }
+
+        //EDIT
         function update(id) {
             document.getElementById('btnAddBook').innerHTML = "EDIT";
             $.ajax({
@@ -109,6 +114,8 @@
                 }
             })
         }
+
+        //SEARCH
         function searchPhone() {
             let name = document.getElementById("search").value;
             $(function () {
@@ -151,9 +158,9 @@
                     }
                 })
             })
-
         }
-        //Pagination
+
+        //PAGINATION
         function pageSmartPhone() {
             $(function () {
                 var container = $('#demo');
@@ -197,21 +204,19 @@
             })
         }
 
+        //RESET AFTER CREATE
         function reset() {
             $('#producer').val('');
             $('#model').val('');
             $('#price').val('');
             $('#id').val('');
-
         }
     </script>
-
-
 </head>
 <body>
 <nav class="navbar navbar-light" style="background-color: #e61994">
     <a style="color: blue;" href="file-html/form-login/login.html">
-        <b id="login" style="font-size: 30px"></b>
+        <p id="login" style="font-size: 30px"></p>
     </a>
     <!--    <a type="button" id="register" href="file-html/form-login/register.html"></a>-->
     <a id="register" href="file-html/form-login/register.html">
@@ -222,70 +227,52 @@
     </a>
 </nav>
 
-<div id="includedContent"></div>
-<div class="input-group mb-3">
-    <span class="input-group-text" id="basic-addon1">Search</span>
-    <input oninput="searchPhone()" type="text" id="search" class="form-control" placeholder="Search"
-           aria-label="Username" aria-describedby="basic-addon1">
-</div>
-<div>
-
-    <table class="table">
-
-        <td>
+<div class="container">
+    <div class="row">
+        <div style="margin-top: 20px">
+            <div id="includedContent"></div>
             <div class="input-group mb-3">
-                <input oninput="searchPhone()" type="hidden" id="id" class="form-control" placeholder="Search"
+                <span class="input-group-text" id="basic-addon1">Search</span>
+                <input oninput="searchPhone()" type="text" id="search" class="form-control" placeholder="Search"
                        aria-label="Username" aria-describedby="basic-addon1">
             </div>
-            <!--            <input class="form-control" type="text" id = "id" hidden>-->
-        </td>
-
-        <tr>
-            <td>Producer</td>
-            <td><input type="text" id="producer"></td>
-        </tr>
-        <tr>
-            <td>Model</td>
-            <td><input type="text" id="model"></td>
-        </tr>
-        <tr>
-            <td>Price</td>
-            <td><input type="text" id="price"></td>
-        </tr>
-        <tr>
-            <td>Image</td>
-            <td>
+            <div class="form-create" style="width: 350px">
+                <h1>Form Create</h1>
+                <input type="hidden" id="id">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Producer</span>
+                    </div>
+                    <input type="text" id="producer" class="form-control" placeholder="Producer" aria-label="Producer"
+                           aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Model</span>
+                    </div>
+                    <input type="text" id="model" class="form-control" placeholder="model" aria-label="Producer"
+                           aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Price</span>
+                    </div>
+                    <input type="text" id="price" class="form-control" placeholder="price" aria-label="Producer"
+                           aria-describedby="basic-addon1">
+                </div>
+                <!--                <div class="input-group mb-3">-->
+                <!--                    <div class="input-group-prepend">-->
+                <span class="input-group-text">Image</span>
                 <progress value="0" max="100" id="uploader">0%</progress>
                 <input type="file" value="upload" accept=".jpg" id="fileButton">
-                <h1>Show Image</h1>
-                <div class="show_image" id="imgDiv"></div>
-            </td>
-        </tr>
-        <tr colspan="2">
-            <td>
-                <button type="submit" id="btnAddBook">Create</button>
-            </td>
-        </tr>
-    </table>
-    <!--    <section class="content">-->
-    <!--        <div class="container-fluid">-->
-    <!--            <table border="1" id="tblBook" class="table">-->
-    <!--                <thead>-->
-    <!--                <tr class="table-primary">-->
-    <!--                    <th>Producer</th>-->
-    <!--                    <th>Model</th>-->
-    <!--                    <th>Price</th>-->
-    <!--                    <th>Image</th>-->
-    <!--                    <th>Edit</th>-->
-    <!--                    <th>Delete</th>-->
-    <!--                </tr>-->
-    <!--                </thead>-->
-    <!--                <tbody>-->
+                <button class="btn btn-success" type="submit" id="btnAddBook">Create</button>
+                <div id="imgDiv"></div>
+                <!--                    </div>-->
+                <!--                </div>-->
 
-    <!--                </tbody>-->
-    <!--            </table>-->
-    <!--        </div>-->
-    <!--    </section>-->
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>

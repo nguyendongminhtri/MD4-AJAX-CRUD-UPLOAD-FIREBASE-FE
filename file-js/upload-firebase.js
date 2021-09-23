@@ -78,8 +78,8 @@ fileButton.addEventListener('change', function (e) {
             let divLocation = document.getElementById("imgDiv");
             let imgElement = document.createElement("img");
             imgElement.src = downloadURL
-            imgElement.width = 50;
-            imgElement.height = 50;
+            imgElement.width = 100;
+            imgElement.height = 100;
             console.log('pic ==', downloadURL)
             divLocation.append(imgElement);
         });
