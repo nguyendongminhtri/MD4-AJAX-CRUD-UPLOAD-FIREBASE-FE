@@ -2,250 +2,315 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.css"/>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"
+        integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT"
+        crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+
+
 <head>
-  <style>
-    .show_image {
-      width: 100px;
-      height: 100px;
-    }
-
-  </style>
-
-
-
-  <script type = "text/javascript">
-    $(document).ready(function () {
-      var book = {};
-      // var dynamicURL = "";
-      // var image = resultImage();
-      var methodName = "";
-      getAllBooks();
-
-      $('#btnAddBook').click(function () {
-        book.producer = $('#producer').val();
-        console.log('producer', book.producer)
-        book.model = $('#model').val();
-        book.price = $('#price').val();
-        book.image =  resultImage();
-        console.log('book.image', book.image)
-        var id = $('#id').val();
-        console.log('id = ',id)
-        if(id){
-          document.getElementById('btnAddBook').innerHTML = "CREATE";
-          //update it
-          dynamicURL = "http://localhost:8080/phone/update/"+id;
-          methodName = "PUT";
-
-        }else{
-          document.getElementById('btnAddBook').innerHTML = "CREATE";
-          //save it
-          dynamicURL = "http://localhost:8080/phone/";
-          methodName = "POST";
-
+    <style>
+        .show_image {
+            width: 100px;
+            height: 100px;
         }
-        var bookObj = JSON.stringify(book);
-        $.ajax({
-          url: dynamicURL,
-          method: methodName,
-          data: bookObj,
-          headers: {
-            Authorization: 'Bearer '+window.sessionStorage.getItem('TOKEN_KEY')
-          },
-          contentType: 'application/json; charset=utf-8',
-          success: function () {
-            alert('Saved successfully');
-            getAllBooks();
-            reset();
-            window.location.reload();
-          },
-          error: function (error) {
-            console.log('error',error)
-            alert(error);
-          }
+
+    </style>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var book = {};
+            // var dynamicURL = "";
+            // var image = resultImage();
+            var methodName = "";
+            // getAllBooks();
+            pageSmartPhone();
+            $('#btnAddBook').click(function () {
+                book.producer = $('#producer').val();
+                console.log('producer', book.producer)
+                book.model = $('#model').val();
+                book.price = $('#price').val();
+                book.image = resultImage();
+                console.log('book.image', book.image)
+                var id = $('#id').val();
+                console.log('id = ', id)
+                if (id) {
+                    document.getElementById('btnAddBook').innerHTML = "CREATE";
+                    //update it
+                    dynamicURL = "http://localhost:8080/phone/update/" + id;
+                    methodName = "PUT";
+
+                } else {
+                    document.getElementById('btnAddBook').innerHTML = "CREATE";
+                    //save it
+                    dynamicURL = "http://localhost:8080/phone/";
+                    methodName = "POST";
+
+                }
+                var bookObj = JSON.stringify(book);
+                $.ajax({
+                    url: dynamicURL,
+                    method: methodName,
+                    data: bookObj,
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem('TOKEN_KEY')
+                    },
+                    contentType: 'application/json; charset=utf-8',
+                    success: function () {
+                        alert('Saved successfully');
+                        pageSmartPhone();
+                        reset();
+                        // window.location.reload();
+                    },
+                    error: function (error) {
+                        console.log('error', error)
+                        alert(error);
+                    }
+                })
+            })
         })
-      })
-    })
-
-    function getAllBooks() {
-      $.ajax({
-        url: "http://localhost:8080/phone",
-        method: "GET",
-        dataType: "json",
-        success: function (data) {
-          console.log('data',data)
-          var tableBody = $('#tblBook tbody');
-          tableBody.empty();
-                   $(data).each(function (index, element) {
-                     for(let i=0;i<data.length;i++){
-                       element.content = '<img '+'class ='+"show_image "+'src='+element.image+'>';
-                     }
-                     console.log('element', element)
-            tableBody.append('<tr><td>'+element.producer+'</td><td>'+element.model+'</td><td>'+element.price+'</td>' +
-                    '<td>'+element.content+'</td><td><button onclick = "update('+element.id+')">Update</button> | <button onclick = "deleteBook('+element.id+')">Delete</button></td></tr>');
-
-          })
-        },
-        error: function (error) {
-          alert(error);
+        function deleteBook(id) {
+            $.ajax({
+                url: 'http://localhost:8080/phone/delete/' + id,
+                method: 'DELETE',
+                success: function () {
+                    alert('Delete success!');
+                    pageSmartPhone();
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            })
         }
-      })
-    }
-
-    function deleteBook(id){
-      $.ajax({
-        url: 'http://localhost:8080/phone/delete/'+id,
-        method: 'DELETE',
-        success: function () {
-          alert('record has been deleted');
-          getAllBooks();
-        },
-        error: function (error) {
-          alert(error);
+        function update(id) {
+            document.getElementById('btnAddBook').innerHTML = "EDIT";
+            $.ajax({
+                url: 'http://localhost:8080/phone/detail/' + id,
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $('#producer').val(data.producer);
+                    $('#model').val(data.model);
+                    $('#price').val(data.price);
+                    $('#id').val(data.id);
+                    pageSmartPhone();
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            })
         }
-      })
-    }
-    function searchPhone() {
-      let name = document.getElementById("search").value;
-      //lay du lieu
-      $.ajax({
-        type: "Get",
-        //tên API
-        // url: 'http://localhost:8080/phone/'+name,
-        url: `http://localhost:8080/phone/${name}`,
-        //xử lý khi thành công
-        success: function (data) {
-          console.log("data ====>", data)
-          var tableBody = $('#tblBook tbody');
-          tableBody.empty();
-          $(data).each(function (index, element) {
-            tableBody.append('<tr><td>'+element.producer+'</td><td>'+element.model+'</td><td>'+element.price+'</td><td><button onclick = "update('+element.id+')">Update</button> | <button onclick = "deleteBook('+element.id+')">Delete</button></td></tr>');
-          })
+        function searchPhone() {
+            let name = document.getElementById("search").value;
+            $(function () {
+                var container = $('#demo');
+                container.pagination({
+                    dataSource: `http://localhost:8080/phone/${name}`,
+                    locator: 'items',
+                    totalNumber: 100,
+                    pageSize: 5,
+                    callback: function (response, pagination) {
+                        console.log('this.datasource -->', this.dataSource)
+                        var dataHtml = '<table border="1" class="table">';
+                        var pageStart = (pagination.pageNumber - 1) * pagination.pageSize;
+                        var pageEnd = pageStart + pagination.pageSize;
+                        var pageItems = response.slice(pageStart, pageEnd);
+                        $.each(pageItems, function (index, item) {
+                            // console.log('dataSource ==',dataHtml)
+                            // console.log('item = ', item)
+                            dataHtml +=
+                                '<tr class="table-primary">' +
+                                '<th>Producer</th>' +
+                                '<th>Model</th>' +
+                                '<th>Price</th>' +
+                                '<th>Image</th>' +
+                                '<th>Edit</th>' +
+                                '<th>Delete</th>'
+                                + '</tr>'
+                                + '<tr>'
+                                + '<td>' + '<p>' + item.producer + '</p>' + '</td>'
+                                + '<td>' + '<p>' + item.model + '</p>' + '</td>'
+                                + '<td>' + '<p>' + item.price + '</p>' + '</td>'
+                                + '<td>' + '<img ' + 'class =' + "show_image " + 'src=' + item.image + '>' + '</td>'
+                                + '<td><button class="btn btn-primary" onclick = "update(' + item.id + ')">Update</button> </td>'
+                                + '<td><button class="btn btn-danger" onclick = "deleteBook(' + item.id + ')">Delete</button> </td>'
+                                + '</tr>';
+
+                        });
+                        dataHtml += '</table>';
+                        container.prev().html(dataHtml);
+                    }
+                })
+            })
+
         }
-      });
+        //Pagination
+        function pageSmartPhone() {
+            $(function () {
+                var container = $('#demo');
+                container.pagination({
+                    dataSource: 'http://localhost:8080/phone',
+                    locator: 'items',
+                    totalNumber: 100,
+                    pageSize: 5,
+                    callback: function (response, pagination) {
+                        console.log('this.datasource -->', this.dataSource)
+                        let dataHtml = '<table border="1" class="table">';
+                        let pageStart = (pagination.pageNumber - 1) * pagination.pageSize;
+                        let pageEnd = pageStart + pagination.pageSize;
+                        let pageItems = response.slice(pageStart, pageEnd);
+                        $.each(pageItems, function (index, item) {
+                            // console.log('dataSource ==',dataHtml)
+                            // console.log('item = ', item)
+                            dataHtml +=
+                                '<tr class="table-primary">' +
+                                '<th>Producer</th>' +
+                                '<th>Model</th>' +
+                                '<th>Price</th>' +
+                                '<th>Image</th>' +
+                                '<th>Edit</th>' +
+                                '<th>Delete</th>'
+                                + '</tr>'
+                                + '<tr>'
+                                + '<td>' + '<p>' + item.producer + '</p>' + '</td>'
+                                + '<td>' + '<p>' + item.model + '</p>' + '</td>'
+                                + '<td>' + '<p>' + item.price + '</p>' + '</td>'
+                                + '<td>' + '<img ' + 'class =' + "show_image " + 'src=' + item.image + '>' + '</td>'
+                                + '<td><button class="btn btn-primary" onclick = "update(' + item.id + ')">Update</button> </td>'
+                                + '<td><button class="btn btn-danger" onclick = "deleteBook(' + item.id + ')">Delete</button> </td>'
+                                + '</tr>';
 
-    }
-
-    function update(id){
-      document.getElementById('btnAddBook').innerHTML = "EDIT";
-      $.ajax({
-        url: 'http://localhost:8080/phone/detail/'+id,
-        method: 'GET',
-        dataType: 'json',
-        success: function (data) {
-          $('#producer').val(data.producer);
-          $('#model').val(data.model);
-          $('#price').val(data.price);
-          $('#id').val(data.id);
-          getAllBooks();
-        },
-        error: function (error) {
-          alert(error);
+                        });
+                        dataHtml += '</table>';
+                        container.prev().html(dataHtml);
+                    }
+                })
+            })
         }
-      })
-    }
-    function reset(){
-      $('#producer').val('');
-      $('#model').val('');
-      $('#price').val('');
-      $('#id').val('');
 
-    }
-  </script>
+        function reset() {
+            $('#producer').val('');
+            $('#model').val('');
+            $('#price').val('');
+            $('#id').val('');
 
+        }
+    </script>
 
 
 </head>
 <body>
 <nav class="navbar navbar-light" style="background-color: #e61994">
-  <a style="color: blue;" href="file-html/form-login/login.html">
-    <b id="login" style="font-size: 30px"></b>
+    <a style="color: blue;" href="file-html/form-login/login.html">
+        <b id="login" style="font-size: 30px"></b>
     </a>
-  <!--    <a type="button" id="register" href="file-html/form-login/register.html"></a>-->
-  <a id="register" href="file-html/form-login/register.html">
-    <!--    <p id="register" >Register</p>-->
-  </a>
-  <a  href="file-html/form-login/user-account.html">
-    <b id="user-account"style="font-size: 30px; color: blue"></b>
-  </a>
+    <!--    <a type="button" id="register" href="file-html/form-login/register.html"></a>-->
+    <a id="register" href="file-html/form-login/register.html">
+        <!--    <p id="register" >Register</p>-->
+    </a>
+    <a href="file-html/form-login/user-account.html">
+        <b id="user-account" style="font-size: 30px; color: blue"></b>
+    </a>
 </nav>
 
 <div id="includedContent"></div>
 <div class="input-group mb-3">
-  <span class="input-group-text" id="basic-addon1">Search</span>
-  <input oninput="searchPhone()"type="text" id="search" class="form-control" placeholder="Search" aria-label="Username" aria-describedby="basic-addon1">
+    <span class="input-group-text" id="basic-addon1">Search</span>
+    <input oninput="searchPhone()" type="text" id="search" class="form-control" placeholder="Search"
+           aria-label="Username" aria-describedby="basic-addon1">
 </div>
 <div>
 
-  <table class="table" >
+    <table class="table">
 
-    <td>
-      <div class="input-group mb-3">
-        <input oninput="searchPhone()"type="hidden" id="id" class="form-control" placeholder="Search" aria-label="Username" aria-describedby="basic-addon1">
-      </div>
-      <!--            <input class="form-control" type="text" id = "id" hidden>-->
-    </td>
+        <td>
+            <div class="input-group mb-3">
+                <input oninput="searchPhone()" type="hidden" id="id" class="form-control" placeholder="Search"
+                       aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+            <!--            <input class="form-control" type="text" id = "id" hidden>-->
+        </td>
 
-    <tr>
-      <td>Producer</td>
-      <td><input type="text" id = "producer"></td>
-    </tr>
-    <tr>
-      <td>Model</td>
-      <td><input type="text" id = "model"></td>
-    </tr>
-    <tr>
-      <td>Price</td>
-      <td><input type="text" id = "price"></td>
-    </tr>
-    <tr>
-      <td>Image</td>
-      <td>
-        <progress value="0" max="100" id="uploader">0%</progress>
-        <input type="file" value="upload" accept=".jpg" id="fileButton">
-        <h1>Show Image</h1>
-        <div class="show_image" id="imgDiv"></div>
-      </td>
-    </tr>
-    <tr colspan = "2">
-      <td><button type="submit"  id="btnAddBook">Create</button></td>
-    </tr>
-  </table>
-  <section class="content">
-    <div class="container-fluid">
-  <table border = "1" id = "tblBook" class="table">
-    <thead>
-    <tr class="table-primary">
-      <th>Producer</th>
-      <th>Model</th>
-      <th>Price</th>
-      <th>Image</th>
-      <th>Edit</th>
-      <th>Delete</th>
-    </tr>
-    </thead>
-    <tbody>
+        <tr>
+            <td>Producer</td>
+            <td><input type="text" id="producer"></td>
+        </tr>
+        <tr>
+            <td>Model</td>
+            <td><input type="text" id="model"></td>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td><input type="text" id="price"></td>
+        </tr>
+        <tr>
+            <td>Image</td>
+            <td>
+                <progress value="0" max="100" id="uploader">0%</progress>
+                <input type="file" value="upload" accept=".jpg" id="fileButton">
+                <h1>Show Image</h1>
+                <div class="show_image" id="imgDiv"></div>
+            </td>
+        </tr>
+        <tr colspan="2">
+            <td>
+                <button type="submit" id="btnAddBook">Create</button>
+            </td>
+        </tr>
+    </table>
+    <!--    <section class="content">-->
+    <!--        <div class="container-fluid">-->
+    <!--            <table border="1" id="tblBook" class="table">-->
+    <!--                <thead>-->
+    <!--                <tr class="table-primary">-->
+    <!--                    <th>Producer</th>-->
+    <!--                    <th>Model</th>-->
+    <!--                    <th>Price</th>-->
+    <!--                    <th>Image</th>-->
+    <!--                    <th>Edit</th>-->
+    <!--                    <th>Delete</th>-->
+    <!--                </tr>-->
+    <!--                </thead>-->
+    <!--                <tbody>-->
 
-    </tbody>
-  </table>
-    </div>
-  </section>
+    <!--                </tbody>-->
+    <!--            </table>-->
+    <!--        </div>-->
+    <!--    </section>-->
 </div>
+
 </body>
 <!--<script src="file-js/call-another-html.js"></script>-->
 <script>
-  console.log('token 0-->',window.sessionStorage.getItem('TOKEN_KEY'))
-  if(window.sessionStorage.getItem('TOKEN_KEY')==null){
-    document.getElementById('register').innerHTML = "Register"
-    document.getElementById('login').innerHTML = "Login"
-  } else {
-    document.getElementById('user-account').innerHTML = window.sessionStorage.getItem('NAME_KEY');
-  }
+    console.log('token 0-->', window.sessionStorage.getItem('TOKEN_KEY'))
+    if (window.sessionStorage.getItem('TOKEN_KEY') == null) {
+        document.getElementById('register').innerHTML = "Register"
+        document.getElementById('login').innerHTML = "Login"
+    } else {
+        document.getElementById('user-account').innerHTML = window.sessionStorage.getItem('NAME_KEY');
+    }
 
 </script>
 <script src="file-js/upload-firebase.js"></script>
+<!-- Pagination Lib -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.css" rel="stylesheet"/>
+<hr>
+<h1>Pagination</h1>
+<div id="wrapper">
+    <section>
+        <div class="data-container"></div>
+        <div id="demo"></div>
+    </section>
+</div>
 </html>
